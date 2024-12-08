@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vinsights Solutions - AI Chatbots, Custom AI Models, Tailored Solutions">
+    <title>Vinsights Solutions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        header {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .nav {
+            margin-top: 10px;
+        }
+        .nav a {
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .nav a:hover {
+            background-color: #005b99;
+        }
+        .content {
+            padding: 40px;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            font-size: 2em;
+            color: #003366;
+        }
+        .section p {
+            font-size: 1.1em;
+        }
+        .gallery {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .gallery img {
+            width: 45%;
+            border-radius: 10px;
+        }
+        .cta {
+            margin-top: 30px;
+            background-color: #e8e8e8;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .cta button {
+            background-color: #003366;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+        }
+        footer {
+            background-color: #003366;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Vinsights Solutions</h1>
+    <div class="nav">
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#contact">Contact</a>
+    </div>
+</header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vinsights AI Chat</title>
+    <style>
+        /* Position the chatbot button at the bottom-right */
+        #chatbot-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+        }
+
+        /* Hidden iframe by default */
+        #chatbot-iframe {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            border: none;
+            display: none; /* Hidden initially */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* When the iframe is visible */
+        #chatbot-iframe.open {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Chatbot Button -->
+    <div id="chatbot-btn">💬</div>
+
+    <!-- Chatbot Iframe -->
+    <iframe id="chatbot-iframe" 
+            src="http://64.227.132.251:3000/chatlink" 
+            title="Chatbot"></iframe>
+
+    <script>
+        // Get the chatbot button and iframe elements
+        const chatbotBtn = document.getElementById('chatbot-btn');
+        const chatbotIframe = document.getElementById('chatbot-iframe');
+
+        // Toggle the iframe visibility when the button is clicked
+        chatbotBtn.onclick = function() {
+            chatbotIframe.classList.toggle('open');
+        };
+    </script>
+
+</body>
+</html>
+
+<div class="content">
+    <!-- About Us Section -->
+    <div class="section" id="about">
+        <h2>About Us</h2>
+        <p>Located in PC Patty, Theni, Tamil Nadu, Vinsights Solutions offers cutting-edge AI and machine learning solutions tailored to meet the needs of businesses.</p>
+    </div>
+
+    <!-- Services Section -->
+    <div class="section" id="services">
+        <h2>Our Services</h2>
+        <p>At Vinsights Solutions, we specialize in providing comprehensive AI-powered solutions. Here are our main services:</p>
+        <ul>
+            <li><strong>AI Chatbot Building:</strong> Creating intelligent chatbots for automated customer service and user engagement.</li>
+            <li><strong>Custom Model Fine-Tuning:</strong> Fine-tuning existing AI models to match specific business needs and improve performance.</li>
+            <li><strong>Tailored AI Solutions for Enterprises:</strong> Developing bespoke AI systems that integrate seamlessly into large-scale business operations.</li>
+        </ul>
+        
+        <!-- Gallery with images of services -->
+        <div class="gallery">
+            <img src="https://via.placeholder.com/400x250?text=AI+Chatbot+Service" alt="AI Chatbot">
+            <img src="https://via.placeholder.com/400x250?text=Custom+Model+Fine-Tuning" alt="Custom Model Fine-Tuning">
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="section" id="testimonials">
+        <h2>What Our Clients Say</h2>
+        <p>"Vinsights Solutions transformed our customer engagement with their AI chatbot. It's like having a 24/7 support team!" - Client A</p>
+        <p>"Their custom AI models helped us optimize operations and save significant time. Highly recommend!" - Client B</p>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="section" id="contact">
+        <h2>Contact Us</h2>
+        <p>If you're ready to elevate your business with AI, get in touch with us today!</p>
+        <p>Email: <a href="mailto:Vinsights.ai@gmail.com">Vinsights.ai@gmail.com</a></p>
+        
+        <!-- CTA Button -->
+        <div class="cta">
+            <button onclick="window.location.href='mailto:Vinsights.ai@gmail.com'">Contact Us Now</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 Vinsights Solutions | All Rights Reserved</p>
+</footer>
+</body>
+</html>
