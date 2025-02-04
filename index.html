@@ -93,44 +93,51 @@
 </header>
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vinsights AI Chat</title>
-    <style>
-        /* Position the chatbot button at the bottom-right */
-        #chatbot-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            font-size: 18px;
+<script>
+  (function(){
+    // Create a temporary function that will queue API calls until the widget is ready.
+    if (!window.aixaChat || window.aixaChat("getState") !== "initialized") {
+      window.aixaChat = (...args) => {
+        if (!window.aixaChat.q) { window.aixaChat.q = []; }
+        window.aixaChat.q.push(args);
+      };
+      // Use a Proxy so that any method call (other than accessing the queue) is queued.
+      window.aixaChat = new Proxy(window.aixaChat, {
+        get(target, prop) {
+          if (prop === "q") {
+            return target.q;
+          }
+          return (...args) => target(prop, ...args);
         }
+      });
+    }
+  
+    // Optionally, define your configuration before loading the main script.
+    window.embeddedChatbotConfig = {
+      // For example, if you still need to pass an encrypted iframe source:
+      iframeSrc: "https://agents.aisa-x.ai/agentlink/YOUR_ENCRYPTED_CONFIG_STRING",
+      // You can also include other UI or behavioral customizations here.
+    };
 
-        /* Hidden iframe by default */
-        #chatbot-iframe {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 350px;
-            height: 500px;
-            border: none;
-            display: none; /* Hidden initially */
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+    // Function to load your main widget script dynamically.
+    const onLoad = function(){
+      const script = document.createElement("script");
+      script.src = "https://agents.aisa-x.ai/aiagent.min.js";
+      script.id = "aisaChatWidget";
+      // You can set additional attributes if needed (e.g., defer, async)
+      script.defer = true;
+      document.body.appendChild(script);
+    };
 
-        /* When the iframe is visible */
-        #chatbot-iframe.open {
-            display: block;
-        }
-    </style>
-</head>
+    // Load immediately if the page is already loaded, or wait for the window 'load' event.
+    if (document.readyState === "complete") {
+      onLoad();
+    } else {
+      window.addEventListener("load", onLoad);
+    }
+  })();
+</script>
+
 <body>
 
     <!-- Chatbot Button -->
