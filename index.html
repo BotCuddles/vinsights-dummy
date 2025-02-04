@@ -93,73 +93,145 @@
 </header>
 <!DOCTYPE html>
 <html lang="en">
-<script>
-  (function(){
-    // Create a temporary function that will queue API calls until the widget is ready.
-    if (!window.aixaChat || window.aixaChat("getState") !== "initialized") {
-      window.aixaChat = (...args) => {
-        if (!window.aixaChat.q) { window.aixaChat.q = []; }
-        window.aixaChat.q.push(args);
-      };
-      // Use a Proxy so that any method call (other than accessing the queue) is queued.
-      window.aixaChat = new Proxy(window.aixaChat, {
-        get(target, prop) {
-          if (prop === "q") {
-            return target.q;
-          }
-          return (...args) => target(prop, ...args);
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Advanced & Stylish Chat Bubble</title>
+    <style>
+      /* ===== Chat Bubble (Button) ===== */
+      .chat-bubble {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+        border-radius: 50%;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 1000;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .chat-bubble:hover {
+        transform: scale(1.1);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+      }
+
+      /* Optional: a little tail effect below the bubble */
+      .chat-bubble::before {
+        content: "";
+        position: absolute;
+        bottom: -15px;
+        right: 20px;
+        border-width: 15px 15px 0;
+        border-style: solid;
+        border-color: #0072ff transparent;
+        width: 0;
+        height: 0;
+      }
+
+      /* ===== Chat Window ===== */
+      .chat-window {
+        position: fixed;
+        bottom: 110px;
+        right: 30px;
+        width: 350px;
+        max-width: 90%;
+        height: 500px;
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        z-index: 999;
+        display: none;
+        animation: fadeInUp 0.5s forwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-      });
-    }
-  
-    // Optionally, define your configuration before loading the main script.
-    window.embeddedChatbotConfig = {
-      // For example, if you still need to pass an encrypted iframe source:
-      iframeSrc: "https://agents.aisa-x.ai/agentlink/YOUR_ENCRYPTED_CONFIG_STRING",
-      // You can also include other UI or behavioral customizations here.
-    };
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-    // Function to load your main widget script dynamically.
-    const onLoad = function(){
-      const script = document.createElement("script");
-      script.src = "https://agents.aisa-x.ai/aiagent.min.js";
-      script.id = "aisaChatWidget";
-      // You can set additional attributes if needed (e.g., defer, async)
-      script.defer = true;
-      document.body.appendChild(script);
-    };
+      /* Chat bubble icon styling */
+      .chat-bubble-icon {
+        width: 40px;
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Chat Bubble Button -->
+    <div class="chat-bubble" id="chatToggle">
+      <!-- You can use an SVG, icon font, or image here -->
+      <img
+        src="https://img.icons8.com/fluency/48/ffffff/chat.png"
+        alt="Chat"
+        class="chat-bubble-icon"
+      />
+    </div>
 
-    // Load immediately if the page is already loaded, or wait for the window 'load' event.
-    if (document.readyState === "complete") {
-      onLoad();
-    } else {
-      window.addEventListener("load", onLoad);
-    }
-  })();
-</script>
+    <!-- Chat Window Container -->
+    <div class="chat-window" id="chatWindow">
+      <!-- The chatbot iframe will be loaded here -->
+      <iframe
+        src=""
+        id="chatIframe"
+        style="width: 100%; height: 100%; border: 0;"
+      ></iframe>
+    </div>
 
-<body>
+    <!-- ===== Chatbot Script & Config ===== -->
+    <!-- Load the chatbot script -->
+    <script src="https://agents.aisa-x.ai/aiagent.min.js" defer></script>
 
-    <!-- Chatbot Button -->
-    <div id="chatbot-btn">💬</div>
-
-    <!-- Chatbot Iframe -->
-    <iframe id="chatbot-iframe" 
-            src="http://64.227.132.251:3000/chatlink" 
-            title="Chatbot"></iframe>
-
+    <!-- Chatbot configuration -->
     <script>
-        // Get the chatbot button and iframe elements
-        const chatbotBtn = document.getElementById('chatbot-btn');
-        const chatbotIframe = document.getElementById('chatbot-iframe');
+      window.embeddedChatbotConfig = {
+        iframeSrc:
+          "https://agents.aisa-x.ai/agentlink/U2FsdGVkX1+3s1ulS72RN3bSDTmki8q9gKPoV6AZ8Mw0cNpp6tlK2lzzTVAYV9Tos6CdSjXgVOVaFpkmcF9UfzlLfdXnTZc3zwqHCV6iKwUkhlKKDRPeN3vdbkW0JNXMtxvtjkrKLba5N9mF0SSnIXc1om5FrH08g6xHgTUaZDv/9GLJAsp3cDMsh79AYeGL64JZTPbLeTgi1/JlqNM/LQ=="
+      };
 
-        // Toggle the iframe visibility when the button is clicked
-        chatbotBtn.onclick = function() {
-            chatbotIframe.classList.toggle('open');
-        };
+      // Once the DOM is fully loaded...
+      document.addEventListener("DOMContentLoaded", function () {
+        const chatToggle = document.getElementById("chatToggle");
+        const chatWindow = document.getElementById("chatWindow");
+        const chatIframe = document.getElementById("chatIframe");
+
+        // Set the iframe's source using the chatbot config
+        if (
+          window.embeddedChatbotConfig &&
+          window.embeddedChatbotConfig.iframeSrc
+        ) {
+          chatIframe.src = window.embeddedChatbotConfig.iframeSrc;
+        }
+
+        // Toggle the visibility of the chat window when clicking the bubble
+        chatToggle.addEventListener("click", function () {
+          if (
+            chatWindow.style.display === "none" ||
+            chatWindow.style.display === ""
+          ) {
+            chatWindow.style.display = "block";
+          } else {
+            chatWindow.style.display = "none";
+          }
+        });
+      });
     </script>
-
-</body>
+  </body>
 </html>
 
 <div class="content">
