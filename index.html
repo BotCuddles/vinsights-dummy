@@ -83,97 +83,136 @@
 <body>
 <!DOCTYPE html>
 
-<!-- Chat Widget Start -->
+<!-- Chat Bubble Widget Start -->
 <style>
-  /* Container for the chat widget */
-  #chat-widget {
+  /* Chat Widget Container */
+  #chat-widget-container {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 9999;
-    font-family: Arial, sans-serif;
+    z-index: 10000;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
 
-  /* The chat bubble button */
-  #chat-bubble {
+  /* Chat Toggle Button (Bubble) */
+  #chat-widget-toggle {
+    background-color: #007bff;
+    border: none;
+    border-radius: 50%;
     width: 60px;
     height: 60px;
-    background-color: #007bff; /* Customize with your brand color */
-    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    outline: none;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
   }
-  #chat-bubble:hover {
+
+  #chat-widget-toggle:hover {
     background-color: #0056b3;
   }
 
-  /* Optional: style for the chat icon */
-  #chat-bubble svg {
-    width: 28px;
-    height: 28px;
-    fill: #fff;
-  }
-
-  /* The chat window container */
-  #chat-window {
-    display: none;
-    width: 350px;
-    height: 700px; /* Adjust height as desired */
+  /* Chat Window (Hidden by Default) */
+  #chat-widget-window {
     position: fixed;
-    bottom: 90px; /* Positioned above the chat bubble */
+    bottom: 90px;
     right: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    max-width: calc(100% - 40px);
+    height: 500px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    display: flex;
+    flex-direction: column;
   }
 
-  /* Responsive adjustments (optional) */
-  @media (max-width: 400px) {
-    #chat-window {
-      width: 95%;
-      right: 2.5%;
-    }
+  /* Active State for the Chat Window */
+  #chat-widget-window.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* Chat Window Header */
+  #chat-widget-header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* Close Button in the Header */
+  #chat-widget-close {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* Iframe (Chat Content) */
+  #chat-widget-iframe {
+    flex-grow: 1;
+    border: none;
   }
 </style>
 
-<div id="chat-widget">
-  <!-- Chat window containing your iframe -->
-  <div id="chat-window">
-    <iframe 
-      src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX186zDgPrP27pXeTfBJPYVxsoTqm30N92JMeTlaUk5FqZ8wo0dOd5gsde7oUQLQaVlxoVArZVMGw7AQkesxkZFtMqIY5PMQSQsPKkOrQGW/mbZH1tgMBLeLF3szG/Bu/ocy2p6KSeWkJHzt9qlK1sRsSIP8zS9wGF3mSpPZ9/AvWb+g3GNoZd295W4DiLmSo+jv5+QsDiTpf6w==" 
-      width="100%" 
-      style="height: 100%; border: none;" 
-      frameborder="0">
+<div id="chat-widget-container">
+  <!-- Chat Window (Initially Hidden) -->
+  <div id="chat-widget-window">
+    <div id="chat-widget-header">
+      <span>Chat with us</span>
+      <button id="chat-widget-close" aria-label="Close Chat">&times;</button>
+    </div>
+    <!-- Your provided iframe code starts here -->
+    <iframe id="chat-widget-iframe" 
+            src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX19Ge+kmgoFQvESDTo9R8rTQVAkUd3ana4B3kWTZRsrRbmeum19XLN2My21hsWbuGjWPwnHCWFs0U9V8UxoYlyDOboqe4LcAkFbXUqMP9ISmwiggoBFrzgPGIWoIY8pM3H20maafBVLnfvTfW/8j/coB8qzR4DIgkOjlNMZq1x+fnqJF66RtwjJMV285dYwgLDnFHkeDmEvM9g==" 
+            width="100%" 
+            style="height: 100%; min-height: 700px" 
+            frameborder="0">
     </iframe>
+    <!-- Your provided iframe code ends here -->
   </div>
-
-  <!-- Chat bubble button -->
-  <div id="chat-bubble" title="Chat with us">
-    <!-- Simple chat icon using SVG (you can replace it with your own icon) -->
-    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-      <path d="M8 2C4.686 2 2 4.014 2 6.5c0 1.505.84 2.835 2.116 3.716-.03.194-.136.935-.396 1.849-.04.147.044.154.16.05 1.275-1.137 2.267-1.916 2.267-1.916.16-.112.384-.175.606-.175h.005c.221 0 .445.063.606.175 0 0 1.082.758 2.367 1.892.115.105.2.1.16-.05-.26-.914-.367-1.655-.396-1.849C13.16 9.335 14 8.005 14 6.5 14 4.014 11.314 2 8 2z"/>
+  <!-- Chat Bubble Toggle Button -->
+  <button id="chat-widget-toggle" aria-label="Open Chat">
+    <!-- Chat Icon SVG -->
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
     </svg>
-  </div>
+  </button>
 </div>
 
 <script>
-  // Toggle the chat window visibility when the bubble is clicked
-  document.getElementById("chat-bubble").addEventListener("click", function() {
-    var chatWindow = document.getElementById("chat-window");
-    if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
-      chatWindow.style.display = "block";
-    } else {
-      chatWindow.style.display = "none";
-    }
-  });
+  (function() {
+    var chatToggle = document.getElementById('chat-widget-toggle');
+    var chatWindow = document.getElementById('chat-widget-window');
+    var chatClose = document.getElementById('chat-widget-close');
+
+    // Toggle chat window when the bubble is clicked
+    chatToggle.addEventListener('click', function() {
+      chatWindow.classList.toggle('open');
+    });
+
+    // Close the chat window when the close button is clicked
+    chatClose.addEventListener('click', function() {
+      chatWindow.classList.remove('open');
+    });
+  })();
 </script>
-<!-- Chat Widget End -->
+<!-- Chat Bubble Widget End -->
+
 
 <div class="content">
     <!-- About Us Section -->
