@@ -122,7 +122,7 @@
     bottom: 90px; /* positions the chat window above the toggle button */
     right: 20px;
     width: 350px;
-    height: 500px;
+    height: 500px; /* reduced height from 700px to 500px */
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
@@ -165,6 +165,26 @@
     width: 100%;
     height: 100%;
     border: 0;
+    min-height: 500px; /* adjusted to match reduced chat window height */
+  }
+
+  /* Modern Send button styling */
+  /* (If your chat interface includes a Send button, ensure it uses the "chat-send" class) */
+  #chat-window .chat-send {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 10px;
+    display: block;
+    width: calc(100% - 20px);
+  }
+  #chat-window .chat-send:hover {
+    background-color: #0056b3;
   }
 </style>
 
@@ -184,7 +204,12 @@
     </div>
     <div id="chat-content">
       <!-- Your provided iframe code -->
-      <iframe src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX186zDgPrP27pXeTfBJPYVxsoTqm30N92JMeTlaUk5FqZ8wo0dOd5gsde7oUQLQaVlxoVArZVMGw7AQkesxkZFtMqIY5PMQSQsPKkOrQGW/mbZH1tgMBLeLF3szG/Bu/ocy2p6KSeWkJHzt9qlK1sRsSIP8zS9wGF3mSpPZ9/AvWb+g3GNoZd295W4DiLmSo+jv5+QsDiTpf6w==" width="100%" style="height: 100%; min-height: 700px" frameborder="0"></iframe>
+      <iframe src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX186zDgPrP27pXeTfBJPYVxsoTqm30N92JMeTlaUk5FqZ8wo0dOd5gsde7oUQLQaVlxoVArZVMGw7AQkesxkZFtMqIY5PMQSQsPKkOrQGW/mbZH1tgMBLeLF3szG/Bu/ocy2p6KSeWkJHzt9qlK1sRsSIP8zS9wGF3mSpPZ9/AvWb+g3GNoZd295W4DiLmSo+jv5+QsDiTpf6w==" width="100%" style="height: 100%; min-height: 500px" frameborder="0"></iframe>
+      <!-- If needed, include a modern Send button here.
+           Ensure the button has the class "chat-send" to pick up the new styles.
+           For example:
+           <button class="chat-send">Send</button>
+      -->
     </div>
   </div>
 </div>
