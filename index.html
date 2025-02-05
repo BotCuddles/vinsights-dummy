@@ -169,50 +169,38 @@
   }
 </style>
 
-<div id="chat-widget-container">
-  <!-- Chat Window (Initially Hidden) -->
-  <div id="chat-widget-window">
-    <div id="chat-widget-header">
-      <span>Chat with us</span>
-      <button id="chat-widget-close" aria-label="Close Chat">&times;</button>
-    </div>
-    <!-- Your provided iframe code starts here -->
-    <iframe id="chat-widget-iframe" 
-            src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX19Ge+kmgoFQvESDTo9R8rTQVAkUd3ana4B3kWTZRsrRbmeum19XLN2My21hsWbuGjWPwnHCWFs0U9V8UxoYlyDOboqe4LcAkFbXUqMP9ISmwiggoBFrzgPGIWoIY8pM3H20maafBVLnfvTfW/8j/coB8qzR4DIgkOjlNMZq1x+fnqJF66RtwjJMV285dYwgLDnFHkeDmEvM9g==" 
-            width="100%" 
-            style="height: 100%; min-height: 700px" 
-            frameborder="0">
+<div id="chat-widget">
+  <!-- Chat window containing your iframe -->
+  <div id="chat-window">
+    <iframe 
+      src="https://agents.aisa-x.ai/agentlink/U2FsdGVkX186zDgPrP27pXeTfBJPYVxsoTqm30N92JMeTlaUk5FqZ8wo0dOd5gsde7oUQLQaVlxoVArZVMGw7AQkesxkZFtMqIY5PMQSQsPKkOrQGW/mbZH1tgMBLeLF3szG/Bu/ocy2p6KSeWkJHzt9qlK1sRsSIP8zS9wGF3mSpPZ9/AvWb+g3GNoZd295W4DiLmSo+jv5+QsDiTpf6w==" 
+      width="100%" 
+      style="height: 100%; border: none;" 
+      frameborder="0">
     </iframe>
-    <!-- Your provided iframe code ends here -->
   </div>
-  <!-- Chat Bubble Toggle Button -->
-  <button id="chat-widget-toggle" aria-label="Open Chat">
-    <!-- Chat Icon SVG -->
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2z"/>
+
+  <!-- Chat bubble button -->
+  <div id="chat-bubble" title="Chat with us">
+    <!-- Simple chat icon using SVG (you can replace it with your own icon) -->
+    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 2C4.686 2 2 4.014 2 6.5c0 1.505.84 2.835 2.116 3.716-.03.194-.136.935-.396 1.849-.04.147.044.154.16.05 1.275-1.137 2.267-1.916 2.267-1.916.16-.112.384-.175.606-.175h.005c.221 0 .445.063.606.175 0 0 1.082.758 2.367 1.892.115.105.2.1.16-.05-.26-.914-.367-1.655-.396-1.849C13.16 9.335 14 8.005 14 6.5 14 4.014 11.314 2 8 2z"/>
     </svg>
-  </button>
+  </div>
 </div>
 
 <script>
-  (function() {
-    var chatToggle = document.getElementById('chat-widget-toggle');
-    var chatWindow = document.getElementById('chat-widget-window');
-    var chatClose = document.getElementById('chat-widget-close');
-
-    // Toggle chat window when the bubble is clicked
-    chatToggle.addEventListener('click', function() {
-      chatWindow.classList.toggle('open');
-    });
-
-    // Close the chat window when the close button is clicked
-    chatClose.addEventListener('click', function() {
-      chatWindow.classList.remove('open');
-    });
-  })();
+  // Toggle the chat window visibility when the bubble is clicked
+  document.getElementById("chat-bubble").addEventListener("click", function() {
+    var chatWindow = document.getElementById("chat-window");
+    if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
+      chatWindow.style.display = "block";
+    } else {
+      chatWindow.style.display = "none";
+    }
+  });
 </script>
-<!-- Chat Bubble Widget End -->
-
+<!-- Chat Widget End -->
 
 <div class="content">
     <!-- About Us Section -->
