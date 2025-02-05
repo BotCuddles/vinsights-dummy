@@ -83,129 +83,183 @@
 <body>
 <!DOCTYPE html>
 
-<!-- Chatbot Styling -->
-<style>
-  /* Chat Icon (Bubble) Styling */
-  .chatbot-icon {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .chatbot-icon img {
-    width: 30px;
-    height: 30px;
-  }
-
-  /* Chat Conversation Window Styling */
-  .chatbot-window {
-    position: fixed;
-    bottom: 90px; /* placed above the chat icon */
-    right: 20px;
-    width: 350px;
-    max-width: 90%;
-    height: 500px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
-    z-index: 1000;
-    display: none; /* hidden by default */
-    font-family: Arial, sans-serif;
-  }
-  /* Chat Window Header */
-  .chatbot-window-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #667eea;
-    color: #fff;
-    padding: 10px 15px;
-    font-size: 16px;
-  }
-  /* Close Button */
-  .chatbot-window-close {
-    background: transparent;
-    border: none;
-    color: #fff;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  /* Iframe fills the rest of the chat window */
-  .chatbot-window iframe {
-    width: 100%;
-    height: calc(100% - 50px); /* accounting for header height */
-    border: none;
-  }
-</style>
-
-<!-- Chatbot Initialization Script -->
+<!-- Chat Widget -->
 <script>
-  // Configure your chatbot iframe source here.
-  window.embeddedChatbotConfig = {
-    iframeSrc: "https://agents.aisa-x.ai/agentlink/U2FsdGVkX19xqdlFoN80IdFccZP1VOx28BB1c8YjhJPw0ooFffkLsQZ1HjUedf4psq27yZtfb8xjo/1lyuq2qJxrtkq/87zVvnscOufwzTbESfQOeto5rmSef7IbmwSlGzyGAOsKYNx0QohkWcJ/CYnb7IcBPdEgAXwcgwdI6u23T13NwFccWb8Y6eqeoV9Ce8sP6SCbWgayJ4WnRMrSUg=="
-  };
+window.embeddedChatbotConfig = {
+  iframeSrc: "https://agents.aisa-x.ai/agentlink/U2FsdGVkX19xqdlFoN80IdFccZP1VOx28BB1c8YjhJPw0ooFffkLsQZ1HjUedf4psq27yZtfb8xjo/1lyuq2qJxrtkq/87zVvnscOufwzTbESfQOeto5rmSef7IbmwSlGzyGAOsKYNx0QohkWcJ/CYnb7IcBPdEgAXwcgwdI6u23T13NwFccWb8Y6eqeoV9Ce8sP6SCbWgayJ4WnRMrSUg==",
+  // Add these new style configuration options
+  styleConfig: {
+    primaryColor: "#2563eb",    // Main brand color
+    secondaryColor: "#1e40af",  // Hover/dark color
+    bubblePosition: "right",    // 'left' or 'right'
+    bubbleSize: "medium",       // 'small', 'medium', 'large'
+    windowTheme: "light",       // 'light' or 'dark'
+    accentColor: "#60a5fa"      // For highlights
+  }
+};
 
-  document.addEventListener("DOMContentLoaded", function() {
-    /* --- Create the Chat Icon --- */
-    var chatIcon = document.createElement("div");
-    chatIcon.className = "chatbot-icon";
-    // Insert an icon image (change the src to your desired icon)
-    var iconImg = document.createElement("img");
-    iconImg.src = "https://example.com/path/to/your-chat-icon.svg"; // Replace with your icon image URL
-    iconImg.alt = "Chat";
-    chatIcon.appendChild(iconImg);
-    document.body.appendChild(chatIcon);
+// Inject custom CSS
+const style = document.createElement('style');
+style.textContent = `
+:root {
+  --primary-color: ${window.embeddedChatbotConfig.styleConfig.primaryColor};
+  --secondary-color: ${window.embeddedChatbotConfig.styleConfig.secondaryColor};
+  --accent-color: ${window.embeddedChatbotConfig.styleConfig.accentColor};
+  --bubble-size: ${window.embeddedChatbotConfig.styleConfig.bubbleSize === 'small' ? '50px' : 
+                  window.embeddedChatbotConfig.styleConfig.bubbleSize === 'medium' ? '60px' : '70px'};
+}
 
-    /* --- Create the Chat Conversation Window --- */
-    var chatWindow = document.createElement("div");
-    chatWindow.className = "chatbot-window";
+.ai-chat-bubble {
+  position: fixed;
+  bottom: 30px;
+  ${window.embeddedChatbotConfig.styleConfig.bubblePosition}: 30px;
+  width: var(--bubble-size);
+  height: var(--bubble-size);
+  border-radius: 50%;
+  background: var(--primary-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  border: 2px solid white;
+}
 
-    // Header for the chat window with title and close button.
-    var header = document.createElement("div");
-    header.className = "chatbot-window-header";
-    header.innerHTML = "<span>Chat with Us</span>";
+.ai-chat-bubble:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+  background: var(--secondary-color);
+}
 
-    var closeButton = document.createElement("button");
-    closeButton.className = "chatbot-window-close";
-    closeButton.innerHTML = "&times;"; // Multiplication sign looks like a close icon
-    header.appendChild(closeButton);
-    chatWindow.appendChild(header);
+.ai-chat-window {
+  position: fixed;
+  bottom: 100px;
+  ${window.embeddedChatbotConfig.styleConfig.bubblePosition}: 30px;
+  width: 380px;
+  max-width: 90%;
+  height: 70vh;
+  background: ${window.embeddedChatbotConfig.styleConfig.windowTheme === 'light' ? '#fff' : '#1f2937'};
+  border-radius: 20px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.2);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  z-index: 999;
+  display: none;
+}
 
-    // Iframe that loads your chatbot
-    var iframe = document.createElement("iframe");
-    iframe.src = window.embeddedChatbotConfig.iframeSrc;
-    chatWindow.appendChild(iframe);
+.ai-chat-window.active {
+  opacity: 1;
+  transform: translateY(0);
+  display: block;
+}
 
-    document.body.appendChild(chatWindow);
+.chat-header {
+  padding: 16px;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
-    /* --- Toggle Chat Window Display --- */
-    chatIcon.addEventListener("click", function() {
-      // Toggle visibility when clicking the chat icon
-      if (chatWindow.style.display === "none" || chatWindow.style.display === "") {
-        chatWindow.style.display = "block";
-      } else {
-        chatWindow.style.display = "none";
-      }
-    });
+.chat-title {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
 
-    // Close the chat window when the close button is clicked.
-    closeButton.addEventListener("click", function(e) {
-      e.stopPropagation(); // Prevent the click from propagating to the chat icon
-      chatWindow.style.display = "none";
-    });
+.close-button {
+  cursor: pointer;
+  padding: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.chat-iframe {
+  width: 100%;
+  height: calc(100% - 60px);
+  border: none;
+}
+
+/* Loading animation */
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background: ${window.embeddedChatbotConfig.styleConfig.windowTheme === 'light' ? '#fff' : '#1f2937'};
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--accent-color);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+`;
+document.head.appendChild(style);
+
+// Create chat elements
+document.addEventListener('DOMContentLoaded', () => {
+  const chatBubble = document.createElement('div');
+  chatBubble.className = 'ai-chat-bubble';
+  chatBubble.innerHTML = `
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+  `;
+
+  const chatWindow = document.createElement('div');
+  chatWindow.className = 'ai-chat-window';
+  chatWindow.innerHTML = `
+    <div class="chat-header">
+      <div class="chat-title">AI Assistant</div>
+      <div class="close-button">×</div>
+    </div>
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+    </div>
+    <iframe class="chat-iframe" src="${window.embeddedChatbotConfig.iframeSrc}"></iframe>
+  `;
+
+  document.body.appendChild(chatBubble);
+  document.body.appendChild(chatWindow);
+
+  // Toggle chat window
+  chatBubble.addEventListener('click', () => {
+    chatWindow.classList.toggle('active');
   });
-</script>
 
+  // Close button
+  chatWindow.querySelector('.close-button').addEventListener('click', () => {
+    chatWindow.classList.remove('active');
+  });
+
+  // Hide chat window when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!chatBubble.contains(e.target) && !chatWindow.contains(e.target)) {
+      chatWindow.classList.remove('active');
+    }
+  });
+});
+</script>
+<!-- Chat Widget -->
+    
 <div class="content">
     <!-- About Us Section -->
     <div class="section" id="about">
